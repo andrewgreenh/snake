@@ -1,4 +1,4 @@
-import { ObjectOf } from "app/strategy/lib/utils";
+import { ObjectOf } from "./utils";
 
 export function DefaultDict<T>(factory: () => T): ObjectOf<T> {
   const target: ObjectOf<T> = {};

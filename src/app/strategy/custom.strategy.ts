@@ -1,6 +1,6 @@
 import { Strategy } from "./strategy";
 import { Context, SnakeDirection, Snake, Position } from "./context";
-import { LazyGraph } from "app/strategy/lib/lazy-graph/LazyGraph";
+import { LazyGraph } from "./lib/lazy-graph/LazyGraph";
 
 const gridSize = 18;
 
