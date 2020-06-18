@@ -1,6 +1,4 @@
-import * as _ from 'lodash';
-
-import Heap from '../Heap';
+import Heap from "../Heap";
 
 export interface AStarConfig<DataType> {
   /**
@@ -32,7 +30,7 @@ export interface AStarConfig<DataType> {
    */
   heapComperator?: (
     node1: AStarNode<DataType>,
-    node2: AStarNode<DataType>,
+    node2: AStarNode<DataType>
   ) => number;
 
   /**
@@ -83,7 +81,7 @@ export function aStar<DataType>(config: AStarConfig<DataType>) {
 
   const shouldNodeComeBeforeNode = (
     a: AStarNode<DataType>,
-    b: AStarNode<DataType>,
+    b: AStarNode<DataType>
   ) => heapComperator(a, b) < 0;
 
   const startNode = {
@@ -146,7 +144,7 @@ export interface AStarResult<T> {
 }
 
 export interface AStarFailResult<T> extends AStarResult<T> {
-  status: 'Fail :(';
+  status: "Fail :(";
 }
 
 export interface AStarSuccessResult<T> extends AStarResult<T> {
@@ -157,21 +155,21 @@ export interface AStarSuccessResult<T> extends AStarResult<T> {
 
 function fail<T>(
   closedNodesByHash: Map<string, AStarNode<T>>,
-  counter: number,
+  counter: number
 ): AStarFailResult<T> {
   return {
     expandedNodeCounter: counter,
     getExpandedNodes: () => closedNodesByHash.values(),
     isFail: () => true,
     isSuccess: () => false,
-    status: 'Fail :(',
+    status: "Fail :(",
   };
 }
 
 function finish<T>(
   node: AStarNode<T>,
   counter: number,
-  closedNodesByHash: Map<string, AStarNode<T>>,
+  closedNodesByHash: Map<string, AStarNode<T>>
 ): AStarSuccessResult<T> {
   const path = recursiveNodeToArray(node);
   return {
@@ -181,17 +179,36 @@ function finish<T>(
     getPath: () => path,
     isFail: () => false,
     isSuccess: () => true,
-    status: 'success',
+    status: "success",
     target: path[path.length - 1],
   };
 }
 
 function recursiveNodeToArray<T>(node: AStarNode<T>) {
-  const result: Omit<AStarNode<T>, 'previousNode'>[] = [];
+  const result: Omit<AStarNode<T>, "previousNode">[] = [];
   let current = node;
   while (current) {
-    result.unshift(_.omit(current, 'previousNode') as AStarNode<T>);
+    result.unshift(omit(current, "previousNode") as AStarNode<T>);
     current = current.previousNode as AStarNode<T>;
   }
   return result;
 }
+
+interface OmitFunction {
+  <T extends object, K extends [...(keyof T)[]]>(obj: T, ...keys: K): {
+    [K2 in Exclude<keyof T, K[number]>]: T[K2];
+  };
+}
+
+const omit: OmitFunction = (obj, ...keys) => {
+  let ret = {} as {
+    [K in keyof typeof obj]: typeof obj[K];
+  };
+  let key: keyof typeof obj;
+  for (key in obj) {
+    if (!keys.includes(key)) {
+      ret[key] = obj[key];
+    }
+  }
+  return ret;
+};

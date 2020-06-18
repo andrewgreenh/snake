@@ -1,6 +1,6 @@
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 const shellConfig = {
   entry: ["./src/app/strategy/custom.strategy.ts"],
@@ -16,12 +16,10 @@ const shellConfig = {
         exclude: /node_modules/,
         options: {
           presets: ["@babel/preset-typescript"],
-          plugins: [
-            "@babel/plugin-proposal-class-properties"
-          ]
+          plugins: ["@babel/plugin-proposal-class-properties"],
         },
       },
-    ]
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -30,19 +28,17 @@ const shellConfig = {
       library: { type: "var", name: "strategy" },
       filename: "remoteEntry.js",
       exposes: {
-        Strategy: './src/app/strategy/custom.strategy.ts',
-      }
+        Strategy: "./src/app/strategy/custom.strategy.ts",
+      },
     }),
-    new CopyPlugin({ patterns: [
-      { from: 'public', to: '' },
-    ]}),      
+    new CopyPlugin({ patterns: [{ from: "public", to: "" }] }),
   ],
   output: {
-    publicPath: "https://manfredsteyer.github.io/snake/",
+    publicPath: "https://andrewgreenh.github.io/snake/",
     filename: "[name].js",
     path: __dirname + "/dist/strategy",
-    chunkFilename: "[id].[chunkhash].js"
+    chunkFilename: "[id].[chunkhash].js",
   },
-  mode: "production"
+  mode: "production",
 };
 module.exports = shellConfig;
